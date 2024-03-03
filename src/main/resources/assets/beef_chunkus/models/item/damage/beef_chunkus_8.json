@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "beef_chunkus:item/beef_chunkus_8"
+  }
+}

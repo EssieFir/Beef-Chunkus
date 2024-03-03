@@ -1,0 +1,62 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "beef_chunkus:item/beef_chunkus"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "damage": 1
+      },
+      "model": "beef_chunkus:item/damage/beef_chunkus_1"
+    },
+    {
+      "predicate": {
+        "damage": 2
+      },
+      "model": "beef_chunkus:item/damage/beef_chunkus_2"
+    },
+    {
+      "predicate": {
+        "damage": 3
+      },
+      "model": "beef_chunkus:item/damage/beef_chunkus_3"
+    },
+    {
+      "predicate": {
+        "damage": 4
+      },
+      "model": "beef_chunkus:item/damage/beef_chunkus_4"
+    },
+    {
+      "predicate": {
+        "damage": 5
+      },
+      "model": "beef_chunkus:item/damage/beef_chunkus_5"
+    },
+    {
+      "predicate": {
+        "damage": 6
+      },
+      "model": "beef_chunkus:item/damage/beef_chunkus_6"
+    },
+    {
+      "predicate": {
+        "damage": 7
+      },
+      "model": "beef_chunkus:item/damage/beef_chunkus_7"
+    },
+    {
+      "predicate": {
+        "damage": 8
+      },
+      "model": "beef_chunkus:item/damage/beef_chunkus_8"
+    },
+    {
+      "predicate": {
+        "damage": 9
+      },
+      "model": "beef_chunkus:item/damage/beef_chunkus_9"
+    }
+  ]
+}
