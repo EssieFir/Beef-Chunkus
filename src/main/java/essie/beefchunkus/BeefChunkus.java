@@ -28,7 +28,7 @@ public class BeefChunkus {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MOD_ID);
     // Create a Deferred Register to hold Items which will all be registered under the "beef_chunkus" namespace
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MOD_ID);
-    public static final FoodProperties BEEF_CHUNKUS_FOOD = (new FoodProperties.Builder()).nutrition(7).saturationMod(0.5F).build();
+    public static final FoodProperties BEEF_CHUNKUS_FOOD = (new FoodProperties.Builder()).nutrition(7).saturationMod(10F).build();
 
     // Creates a new Block with the id "beef_chunkus:example_block", combining the namespace and path
     // Creates a new BlockItem with the id "beef_chunkus:example_block", combining the namespace and path
