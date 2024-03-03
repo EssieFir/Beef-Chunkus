@@ -14,13 +14,14 @@ public class BeefChunkusItem extends Item {
     @Override
     public ItemStack finishUsingItem(ItemStack pStack, Level pLevel, LivingEntity pEntityLiving) {
         //Get the durability of the item before it is consumed.
-        int initialDurability = pStack.getDamageValue();
+        ItemStack initialItem = pStack.copy();
 
         ItemStack itemstack = super.finishUsingItem(pStack, pLevel, pEntityLiving);
         ItemStack item = new ItemStack(BeefChunkus.BEEF_CHUNKUS.get());
         boolean isCreative = ((Player) pEntityLiving).getAbilities().instabuild;
 
-        item.setDamageValue(initialDurability + 1);
+        item.setTag(initialItem.getTag());
+        item.setDamageValue(initialItem.getDamageValue() + 1);
 
         if (item.getDamageValue() >= 10 || isCreative) {
             return itemstack;
