@@ -1,6 +1,8 @@
 package essie.beefchunkus;
 
+import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -34,7 +36,10 @@ public class BeefChunkusEvent implements Listener {
                             damage = itemdmg.getDamage() + 3;
                         }
                         itemdmg.setDamage((short) damage);
-                        item.setItemMeta(itemdmg);
+
+                        if (!player.getGameMode().equals(GameMode.CREATIVE)) {
+                            item.setItemMeta(itemdmg);
+                        }
 
                         player.setSaturation(player.getSaturation() + 0.5f);
                         player.setFoodLevel(player.getFoodLevel() + 7);
@@ -43,6 +48,7 @@ public class BeefChunkusEvent implements Listener {
                             item.setType(Material.AIR);
                         }
 
+                        player.spawnParticle(Particle.ITEM_CRACK, player.getLocation().add(0,1.6,0), 10, 0, 0, 0, 0.1, BeefChunkusItem.beefChunkus);
                         player.playSound(player, Sound.ENTITY_GENERIC_EAT, 1, 1);
                         player.getInventory().setItemInMainHand(item);
                     }
