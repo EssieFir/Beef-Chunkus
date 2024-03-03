@@ -16,7 +16,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "essie.beef_chunkus.BeefChunkus"
+      "essie.beefchunkus.BeefChunkus"
     ]
   },
   "depends": {

@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "RSR",
+    "SBS",
+    "SBS"
+  ],
+  "key": {
+    "R": {
+      "item": "minecraft:cooked_rabbit"
+    },
+    "S": {
+      "item": "minecraft:cooked_beef"
+    },
+    "B": {
+      "item": "minecraft:rabbit_stew"
+    }
+  },
+  "result": {
+    "item": "beef_chunkus:beef_chunkus"
+  }
+}
