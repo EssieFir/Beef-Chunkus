@@ -1,34 +1,38 @@
 package essie.beefchunkus;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
-import net.minecraft.world.World;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.meta.ItemMeta;
 
-public class BeefChunkusItem extends Item {
-    public BeefChunkusItem(Settings settings) {
-        super(settings);
+import java.awt.*;
+
+public class BeefChunkusItem {
+
+    public static ItemStack beefChunkus;
+
+    public static void init() {
+        makeBeefChunkus();
     }
 
-    @Override
-    public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {
-        //Get the durability of the item before it is consumed.
-        ItemStack initialItem = stack.copy();
+    private static void makeBeefChunkus() {
+        ItemStack item = new ItemStack(Material.CARROT_ON_A_STICK, 1);
+        ItemMeta meta = item.getItemMeta();
+        meta.setDisplayName("§rBeef Chunkus");
+        meta.setCustomModelData(1);
+        item.setItemMeta(meta);
+        beefChunkus = item;
 
-        ItemStack itemstack = this.isFood() ? user.eatFood(world, stack) : stack;
-        ItemStack item = new ItemStack(BeefChunkus.BEEF_CHUNKUS);
-        boolean isCreative = user instanceof PlayerEntity && ((PlayerEntity) user).getAbilities().creativeMode;
-
-        item.setNbt(initialItem.getNbt());
-        item.setDamage(initialItem.getDamage() + 1);
-
-        if (item.getDamage() >= 10 || isCreative) {
-            return itemstack;
-        } else {
-            return item;
-        }
+        ShapedRecipe sr = new ShapedRecipe(NamespacedKey.minecraft("beef_chunkus"), item);
+        sr.shape("RBR",
+                 "BSB",
+                 "BSB");
+        sr.setIngredient('R', Material.COOKED_RABBIT);
+        sr.setIngredient('B', Material.COOKED_BEEF);
+        sr.setIngredient('S', Material.RABBIT_STEW);
+        Bukkit.getServer().addRecipe(sr);
     }
 }
