@@ -16,7 +16,7 @@ public class BeefChunkus implements ModInitializer {
      * Runs the mod initializer.
      */
     public static final String MOD_ID = "beef_chunkus";
-    public static final FoodComponent BEEF_CHUNKUS_FOOD = (new FoodComponent.Builder()).hunger(7).saturationModifier(0.5f).build();
+    public static final FoodComponent BEEF_CHUNKUS_FOOD = (new FoodComponent.Builder()).hunger(7).saturationModifier(10f).build();
     public static final Item BEEF_CHUNKUS = new BeefChunkusItem(new FabricItemSettings().food(BEEF_CHUNKUS_FOOD).maxDamage(10).group(ItemGroup.FOOD));
     @Override
     public void onInitialize() {
