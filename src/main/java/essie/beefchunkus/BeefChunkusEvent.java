@@ -41,7 +41,7 @@ public class BeefChunkusEvent implements Listener {
                             item.setItemMeta(itemdmg);
                         }
 
-                        player.setSaturation(player.getSaturation() + 0.5f);
+                        player.setSaturation(player.getSaturation() + 10f);
                         player.setFoodLevel(player.getFoodLevel() + 7);
 
                         if (itemdmg.getDamage() >= 25) {
