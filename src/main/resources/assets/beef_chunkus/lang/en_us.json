@@ -1,3 +1,4 @@
 {
-  "item.beef_chunkus.beef_chunkus": "Beef Chunkus"
+  "item.beef_chunkus.beef_chunkus": "Beef Chunkus",
+  "tooltip.beef_chunkus.remaining_notches": "\uD83C\uDF56 %s/%s Notches \uD83C\uDF56"
 }
