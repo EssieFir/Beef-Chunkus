@@ -51,8 +51,8 @@ public class BeefChunkusEvent implements Listener {
                     player.setFoodLevel(playerFoodLevel + remainingFoodNotches);
                     if (player.getFoodLevel()>= 20) { player.setFoodLevel(20); }
 
-                    amountToSaturate = (float) (amountToFeed * 1.4);
-                    if (amountToSaturate > playerFoodLevel) { amountToSaturate = playerFoodLevel; }
+                    amountToSaturate = (float) (remainingFoodNotches * 1.4);
+                    if (amountToSaturate > playerFoodLevel+remainingFoodNotches) { amountToSaturate = playerFoodLevel+remainingFoodNotches; }
                     player.setSaturation(playerSaturationLevel + amountToSaturate);
 
                     remainingFoodNotches = 0;
@@ -60,7 +60,7 @@ public class BeefChunkusEvent implements Listener {
                 } else {
                     player.setFoodLevel(20);
                     amountToSaturate = (float) (amountToFeed * 1.4);
-                    if (amountToSaturate > playerFoodLevel) { amountToSaturate = playerFoodLevel; }
+                    if (amountToSaturate > playerFoodLevel+amountToFeed) { amountToSaturate = playerFoodLevel+amountToFeed; }
                     player.setSaturation(playerSaturationLevel + amountToSaturate);
                     remainingFoodNotches -= amountToFeed;
                 }
@@ -86,8 +86,8 @@ public class BeefChunkusEvent implements Listener {
                 assert itemdmg != null;
 
                 double foodNotchPercentage = ((double) remainingFoodNotches / maxFoodNotches);
-                int chunkusDamageAmount = (int) Math.round(25-(25*foodNotchPercentage)+0.2);
-
+                int chunkusDamageAmount = (int) Math.round(25-(25*foodNotchPercentage));
+                if (chunkusDamageAmount <= 0) { chunkusDamageAmount = 1; }
 
                 //Damage the item (less than 4 check is, so it adds up to 10 uses)
                 itemdmg.setDamage((short) chunkusDamageAmount);
