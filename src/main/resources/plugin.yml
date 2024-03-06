@@ -1,5 +1,5 @@
 name: BeefChunkus
-version: '${version}'
+version: '${project.version}'
 main: essie.beefchunkus.BeefChunkus
 api-version: '1.20'
 commands:

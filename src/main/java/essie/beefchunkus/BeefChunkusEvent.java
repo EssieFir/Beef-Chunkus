@@ -1,13 +1,7 @@
 package essie.beefchunkus;
 
-import com.comphenix.protocol.wrappers.nbt.NbtBase;
-import com.comphenix.protocol.wrappers.nbt.NbtCompound;
-import com.comphenix.protocol.wrappers.nbt.NbtFactory;
-import com.comphenix.protocol.wrappers.nbt.NbtWrapper;
-import org.bukkit.GameMode;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
+import de.tr7zw.changeme.nbtapi.NBTItem;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -20,22 +14,22 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.List;
 
-public class BeefChunkusEvent implements Listener {
+import static essie.beefchunkus.BeefChunkus.*;
+import static essie.beefchunkus.BeefChunkusItem.*;
 
-    private static final String FOOD_NOTCHES = "beef_chunkus:food_notches";
-    private static final String MAX_FOOD_NOTCHES = "beef_chunkus:max_food_notches";
+public class BeefChunkusEvent implements Listener {
 
     private static void damageItemAndFeedPlayer(Player player, ItemStack item, EquipmentSlot hand) {
         if (!(hand == EquipmentSlot.OFF_HAND && isItemBeefChunkus(player.getInventory().getItemInMainHand()))) {
 
-            //Check if the item has the custom nbt data, if not, add it.
-            if (getItemTag(item, FOOD_NOTCHES) == null) {
-                setItemTag(item, FOOD_NOTCHES, 70);
-                setItemTag(item, MAX_FOOD_NOTCHES, 70);
-            }
+            NBTItem nbtItem = new NBTItem(item, true);
 
-            int remainingFoodNotches = (int) getItemTag(item, FOOD_NOTCHES);
-            int maxFoodNotches = (int) getItemTag(item, MAX_FOOD_NOTCHES);
+            //Check if the item has the custom nbt data, if not, add it.
+            if (nbtItem.getInteger(FOOD_NOTCHES_KEY) == null) { nbtItem.setInteger(FOOD_NOTCHES_KEY, BEEF_CHUNKUS_DEFAULT_FOOD_NOTCHES); }
+            if (nbtItem.getInteger(FOOD_NOTCHES_KEY) == null) { nbtItem.setInteger(MAX_FOOD_NOTCHES_KEY, BEEF_CHUNKUS_DEFAULT_MAX_FOOD_NOTCHES); }
+
+            int remainingFoodNotches = nbtItem.getInteger(FOOD_NOTCHES_KEY);
+            int maxFoodNotches = nbtItem.getInteger(MAX_FOOD_NOTCHES_KEY);
 
             int amountToFeed = 20 - player.getFoodLevel();
             float amountToSaturate;
@@ -51,7 +45,7 @@ public class BeefChunkusEvent implements Listener {
                     player.setFoodLevel(playerFoodLevel + remainingFoodNotches);
                     if (player.getFoodLevel()>= 20) { player.setFoodLevel(20); }
 
-                    amountToSaturate = (float) (remainingFoodNotches * 1.4);
+                    amountToSaturate = (float) (remainingFoodNotches * BEEF_CHUNKUS_SATURATION_MULTIPLIER);
                     if (amountToSaturate > playerFoodLevel+remainingFoodNotches) { amountToSaturate = playerFoodLevel+remainingFoodNotches; }
                     player.setSaturation(playerSaturationLevel + amountToSaturate);
 
@@ -59,40 +53,29 @@ public class BeefChunkusEvent implements Listener {
 
                 } else {
                     player.setFoodLevel(20);
-                    amountToSaturate = (float) (amountToFeed * 1.4);
+                    amountToSaturate = (float) (amountToFeed * BEEF_CHUNKUS_SATURATION_MULTIPLIER);
                     if (amountToSaturate > playerFoodLevel+amountToFeed) { amountToSaturate = playerFoodLevel+amountToFeed; }
                     player.setSaturation(playerSaturationLevel + amountToSaturate);
                     remainingFoodNotches -= amountToFeed;
                 }
 
-                //"Saturate" the player
-//                if (amountToSaturate > remainingSaturationNotches) {
-//                    player.setSaturation(player.getSaturation() + remainingSaturationNotches);
-//                    if (player.getSaturation() >= 20) { player.setSaturation(20); }
-//
-//                    remainingSaturationNotches = 0;
-//
-//                } else {
-//                    player.setSaturation(player.getSaturation() + amountToSaturate);
-//
-//                    remainingSaturationNotches -= amountToSaturate;
-//                }
-
                 //Save the new nbt
-                setItemTag(item, FOOD_NOTCHES, remainingFoodNotches);
+                nbtItem.setInteger(FOOD_NOTCHES_KEY, remainingFoodNotches);
+
+                //update the item
+                item = nbtItem.getItem();
 
                 //Get the Damage metadata
                 Damageable itemdmg = (Damageable) item.getItemMeta();
                 assert itemdmg != null;
 
+                //Calculate the damage percentage.
                 double foodNotchPercentage = ((double) remainingFoodNotches / maxFoodNotches);
                 int chunkusDamageAmount = (int) Math.round(25-(25*foodNotchPercentage));
                 if (chunkusDamageAmount <= 0) { chunkusDamageAmount = 1; }
 
-                //Damage the item (less than 4 check is, so it adds up to 10 uses)
-                itemdmg.setDamage((short) chunkusDamageAmount);
-
                 //Damage the item
+                itemdmg.setDamage((short) chunkusDamageAmount);
                 item.setItemMeta(itemdmg);
             }
 
@@ -126,6 +109,10 @@ public class BeefChunkusEvent implements Listener {
                 Player player = event.getPlayer();
                 ItemStack item = event.getItem();
                 EquipmentSlot hand = event.getHand();
+
+                //Fix the custom model data if it has changed.
+                correctBeefChunkusModelData(item);
+
                 if (player.getFoodLevel() <= 19 || player.getGameMode().equals(GameMode.CREATIVE)) {
                     damageItemAndFeedPlayer(player, item, hand);
                 }
@@ -134,46 +121,20 @@ public class BeefChunkusEvent implements Listener {
     }
 
     private static boolean isItemBeefChunkus(ItemStack item) {
-        if (item != null && item.hasItemMeta() && item.getItemMeta().hasCustomModelData()) {
-            if (item.getItemMeta().getCustomModelData() == BeefChunkusItem.beefChunkus.getItemMeta().getCustomModelData()) {
-                if (item.getType().equals(BeefChunkusItem.beefChunkus.getType())) {
-                    return true;
-                }
-            }
-        }
+        if (item == null) { return false; }
+        NBTItem nbtItem = new NBTItem(item);
+        return nbtItem.getBoolean(VALID_BEEF_CHUNKUS_KEY);
+    }
 
-        return false;
+    private static void correctBeefChunkusModelData(ItemStack item) {
+        if (!item.getItemMeta().hasCustomModelData() || item.getItemMeta().getCustomModelData() != BEEF_CHUNKUS_CUSTOM_MODEL_DATA) {
+            ItemMeta meta = item.getItemMeta();
+            meta.setCustomModelData(BEEF_CHUNKUS_CUSTOM_MODEL_DATA);
+            item.setItemMeta(meta);
+        }
     }
 
     public static List<String> createFoodTooltip(int amount, int maximum) {
         return List.of("§r§7\uD83C\uDF56 " + amount + "/" + maximum + " Notches \uD83C\uDF56");
-    }
-
-    public static void setItemTag(ItemStack item, String key, Integer value) {
-        NbtWrapper<?> wrapper = NbtFactory.fromItemTag(item);
-        NbtCompound compound = NbtFactory.asCompound(wrapper);
-
-        compound.put(key, value);
-
-        NbtFactory.setItemTag(item, compound);
-
-    }
-
-    public static void setItemTag(ItemStack item, String key, Float value) {
-        NbtWrapper<?> wrapper = NbtFactory.fromItemTag(item);
-        NbtCompound compound = NbtFactory.asCompound(wrapper);
-
-        compound.put(key, value);
-
-        NbtFactory.setItemTag(item, compound);
-
-    }
-
-    public static Object getItemTag(ItemStack item, String key) {
-        NbtWrapper<?> wrapper = NbtFactory.fromItemTag(item);
-        NbtCompound compound = NbtFactory.asCompound(wrapper);
-        NbtBase<?> tag = compound.getValue(key);
-
-        return (tag==null)? null : tag.getValue();
     }
 }
