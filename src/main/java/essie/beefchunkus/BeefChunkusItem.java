@@ -27,16 +27,31 @@ public class BeefChunkusItem extends Item {
     public boolean isRepairable(ItemStack pStack) { return false; }
 
     @Override
+    public boolean canBeDepleted() {
+        return false;
+    }
+
+    @Override
+    public boolean isBarVisible(ItemStack item) {
+        return item.getItem().isDamaged(item);
+    }
+
+    @Override
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltip, TooltipFlag pContext) {
 
         CompoundTag compoundTag = pStack.getTag();
 
+        final int DEFAULT_FOOD_NOTCHES = BeefChunkusConfig.default_food_notches.get();
+        final int DEFAULT_MAX_FOOD_NOTCHES = BeefChunkusConfig.default_max_food_notches.get();
+
+        if (compoundTag == null) { compoundTag = new CompoundTag(); }
+
         //Check if the item has the custom nbt data, if not, add it.
         if (compoundTag.get(FOOD_NOTCHES_TAG) == null) {
-            setTag(pStack, FOOD_NOTCHES_TAG, 70);
+            setTag(pStack, FOOD_NOTCHES_TAG, DEFAULT_FOOD_NOTCHES);
         }
         if (compoundTag.get(MAX_FOOD_NOTCHES_TAG) == null) {
-            setTag(pStack, MAX_FOOD_NOTCHES_TAG, 70);
+            setTag(pStack, MAX_FOOD_NOTCHES_TAG, DEFAULT_MAX_FOOD_NOTCHES);
         }
 
         int remainingFoodNotches = compoundTag.getInt(FOOD_NOTCHES_TAG);
@@ -48,6 +63,10 @@ public class BeefChunkusItem extends Item {
 
     @Override
     public ItemStack finishUsingItem(ItemStack pStack, Level pLevel, LivingEntity pEntityLiving) {
+
+        final double SATURATION_MULTIPLIER = BeefChunkusConfig.saturation_multiplier.get();
+        final int DEFAULT_FOOD_NOTCHES = BeefChunkusConfig.default_food_notches.get();
+        final int DEFAULT_MAX_FOOD_NOTCHES = BeefChunkusConfig.default_max_food_notches.get();
 
         //itemstack is consumed and set to air when passed through finishUsingItem, so copy it before it gets deleted.
         ItemStack initialItem = pStack.copy();
@@ -62,12 +81,14 @@ public class BeefChunkusItem extends Item {
 
             CompoundTag initialTag = initialItem.getTag();
 
+            if (initialTag == null) { initialTag = new CompoundTag(); }
+
             //Check if the item has the custom nbt data, if not, add it.
             if (initialTag.get(FOOD_NOTCHES_TAG) == null) {
-                setTag(item, FOOD_NOTCHES_TAG, 70);
+                setTag(pStack, FOOD_NOTCHES_TAG, DEFAULT_FOOD_NOTCHES);
             }
             if (initialTag.get(MAX_FOOD_NOTCHES_TAG) == null) {
-                setTag(item, MAX_FOOD_NOTCHES_TAG, 70);
+                setTag(pStack, MAX_FOOD_NOTCHES_TAG, DEFAULT_MAX_FOOD_NOTCHES);
             }
 
             int remainingFoodNotches = initialTag.getInt(FOOD_NOTCHES_TAG);
@@ -92,7 +113,7 @@ public class BeefChunkusItem extends Item {
                     }
 
                     //Fill the player's food saturation 1.4x the amount that was fed to the player.
-                    amountToSaturate = (float) (remainingFoodNotches * 1.4);
+                    amountToSaturate = (float) (remainingFoodNotches * SATURATION_MULTIPLIER);
                     if (amountToSaturate > playerFoodLevel + remainingFoodNotches) {
                         amountToSaturate = playerFoodLevel + remainingFoodNotches;
                     }
@@ -105,7 +126,7 @@ public class BeefChunkusItem extends Item {
                     player.getFoodData().setFoodLevel(20);
 
                     //Fill the player's food saturation 1.4x the amount that was fed to the player.
-                    amountToSaturate = (float) (amountToFeed * 1.4);
+                    amountToSaturate = (float) (amountToFeed * SATURATION_MULTIPLIER);
                     if (amountToSaturate > playerFoodLevel + amountToFeed) {
                         amountToSaturate = playerFoodLevel + amountToFeed;
                     }
@@ -138,6 +159,7 @@ public class BeefChunkusItem extends Item {
 
     private static void setTag(ItemStack item, String key, int value) {
         CompoundTag tag = item.getTag();
+        if (tag == null) { tag = new CompoundTag(); }
         tag.putInt(key,value);
         item.setTag(tag);
     }
