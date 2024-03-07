@@ -6,14 +6,13 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.tag.TagEntry;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 
 import java.util.List;
+
+import static essie.beefchunkus.BeefChunkus.*;
 
 public class BeefChunkusItem extends Item {
 
@@ -25,16 +24,27 @@ public class BeefChunkusItem extends Item {
     }
 
     @Override
+    public boolean isDamageable() {
+        return false;
+    }
+    @Override
+    public boolean isItemBarVisible(ItemStack stack) {
+        return stack.getDamage() > 0;
+    }
+
+    @Override
     public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context) {
 
         NbtCompound compoundTag = stack.getNbt();
 
+        if (compoundTag == null) { compoundTag = new NbtCompound(); }
+
         //Check if the item has the custom nbt data, if not, add it.
         if (compoundTag.get(FOOD_NOTCHES_TAG) == null) {
-            setTag(stack, FOOD_NOTCHES_TAG, 70);
+            setTag(stack, FOOD_NOTCHES_TAG, default_food_notches);
         }
         if (compoundTag.get(MAX_FOOD_NOTCHES_TAG) == null) {
-            setTag(stack, MAX_FOOD_NOTCHES_TAG, 70);
+            setTag(stack, MAX_FOOD_NOTCHES_TAG, default_max_food_notches);
         }
 
         int remainingFoodNotches = compoundTag.getInt(FOOD_NOTCHES_TAG);
@@ -59,12 +69,14 @@ public class BeefChunkusItem extends Item {
 
             NbtCompound initialTag = initialItem.getNbt();
 
+            if (initialTag == null) {initialTag = new NbtCompound();}
+
             //Check if the item has the custom nbt data, if not, add it.
             if (initialTag.get(FOOD_NOTCHES_TAG) == null) {
-                setTag(item, FOOD_NOTCHES_TAG, 70);
+                setTag(item, FOOD_NOTCHES_TAG, default_food_notches);
             }
             if (initialTag.get(MAX_FOOD_NOTCHES_TAG) == null) {
-                setTag(item, MAX_FOOD_NOTCHES_TAG, 70);
+                setTag(item, MAX_FOOD_NOTCHES_TAG, default_max_food_notches);
             }
 
             int remainingFoodNotches = initialTag.getInt(FOOD_NOTCHES_TAG);
@@ -89,7 +101,7 @@ public class BeefChunkusItem extends Item {
                     }
 
                     //Fill the player's food saturation 1.4x the amount that was fed to the player.
-                    amountToSaturate = (float) (remainingFoodNotches * 1.4);
+                    amountToSaturate = (float) (remainingFoodNotches * saturation_multiplier);
                     if (amountToSaturate > playerFoodLevel + remainingFoodNotches) {
                         amountToSaturate = playerFoodLevel + remainingFoodNotches;
                     }
@@ -102,7 +114,7 @@ public class BeefChunkusItem extends Item {
                     player.getHungerManager().setFoodLevel(20);
 
                     //Fill the player's food saturation 1.4x the amount that was fed to the player.
-                    amountToSaturate = (float) (amountToFeed * 1.4);
+                    amountToSaturate = (float) (amountToFeed * saturation_multiplier);
                     if (amountToSaturate > playerFoodLevel + amountToFeed) {
                         amountToSaturate = playerFoodLevel + amountToFeed;
                     }
@@ -135,6 +147,7 @@ public class BeefChunkusItem extends Item {
 
     private static void setTag(ItemStack item, String key, int value) {
         NbtCompound tag = item.getNbt();
+        if (tag == null) {tag = new NbtCompound();}
         tag.putInt(key,value);
         item.setNbt(tag);
     }

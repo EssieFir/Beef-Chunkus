@@ -1,4 +1,11 @@
 {
   "item.beef_chunkus.beef_chunkus": "Beef Chunkus",
-  "tooltip.beef_chunkus.remaining_notches": "\uD83C\uDF56 %s/%s Notches \uD83C\uDF56"
+  "tooltip.beef_chunkus.remaining_notches": "\uD83C\uDF56 %s/%s Notches \uD83C\uDF56",
+  "text.autoconfig.beef_chunkus.title": "Beef Chunkus Config",
+  "text.autoconfig.beef_chunkus.option.saturation_multiplier": "Saturation Multiplier",
+  "text.autoconfig.beef_chunkus.option.saturation_multiplier.@Tooltip": "Saturation is given by multiplying the amount of hunger restored multiplied by this value,\ncapped by the total amount of hunger the player will have after eating Beef Chunkus",
+  "text.autoconfig.beef_chunkus.option.default_food_notches": "Default Food Notches",
+  "text.autoconfig.beef_chunkus.option.default_food_notches.@Tooltip": "The default amount Beef Chunkus can feed the player",
+  "text.autoconfig.beef_chunkus.option.default_max_food_notches": "Default Max Food Notches",
+  "text.autoconfig.beef_chunkus.option.default_max_food_notches.@Tooltip": "The default maximum amount Beef Chunkus can feed the playe\n(doesn't change the default amount)"
 }

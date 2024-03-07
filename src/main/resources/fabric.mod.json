@@ -17,6 +17,9 @@
   "entrypoints": {
     "main": [
       "essie.beefchunkus.BeefChunkus"
+    ],
+    "modmenu": [
+      "essie.beefchunkus.modmenu.ModMenuIntegration"
     ]
   },
   "depends": {
