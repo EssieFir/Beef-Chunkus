@@ -41,7 +41,8 @@ public class BeefChunkusItem {
 
         beefChunkus = nbtItem.getItem();
 
-        ShapedRecipe sr = new ShapedRecipe(NamespacedKey.minecraft("beef_chunkus"), item);
+
+        ShapedRecipe sr = new ShapedRecipe(BEEF_CHUNKUS_RECIPE, item);
         sr.shape("RBR",
                  "BSB",
                  "BSB");

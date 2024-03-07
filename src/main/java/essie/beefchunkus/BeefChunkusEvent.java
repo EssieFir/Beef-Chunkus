@@ -2,10 +2,12 @@ package essie.beefchunkus;
 
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import org.bukkit.*;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -86,6 +88,7 @@ public class BeefChunkusEvent implements Listener {
             //"Break" the item if it has no more food notches
             if (remainingFoodNotches <= 0) {
                 item.setType(Material.AIR);
+                player.playSound(player.getLocation(), "beef_chunkus:beef_chunkus_finish", 100f, 1f);
             }
 
             //Spawn particles and sounds
@@ -105,10 +108,14 @@ public class BeefChunkusEvent implements Listener {
     public static void onRightClick(PlayerInteractEvent event) {
         if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             if (isItemBeefChunkus(event.getItem())) {
-                event.setCancelled(true);
+
                 Player player = event.getPlayer();
                 ItemStack item = event.getItem();
                 EquipmentSlot hand = event.getHand();
+
+                if (player.getVehicle() != null && player.getVehicle().getType() == EntityType.PIG) {
+                    event.setCancelled(true);
+                }
 
                 //Fix the custom model data if it has changed.
                 correctBeefChunkusModelData(item);
@@ -117,6 +124,15 @@ public class BeefChunkusEvent implements Listener {
                     damageItemAndFeedPlayer(player, item, hand);
                 }
             }
+        }
+    }
+
+    @EventHandler
+    public static void onCraft(CraftItemEvent event) {
+        if (isItemBeefChunkus(event.getCurrentItem())) {
+            Player player = (Player) event.getWhoClicked();
+            player.playSound(player.getLocation(), "beef_chunkus:beef_chunkus_craft", 100f, 1f);
+            event.getWhoClicked().discoverRecipe(BEEF_CHUNKUS_RECIPE);
         }
     }
 

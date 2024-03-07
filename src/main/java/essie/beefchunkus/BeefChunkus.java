@@ -1,6 +1,7 @@
 package essie.beefchunkus;
 
 import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class BeefChunkus extends JavaPlugin {
@@ -9,6 +10,8 @@ public final class BeefChunkus extends JavaPlugin {
     public static double BEEF_CHUNKUS_SATURATION_MULTIPLIER;
     public static int BEEF_CHUNKUS_DEFAULT_FOOD_NOTCHES;
     public static int BEEF_CHUNKUS_DEFAULT_MAX_FOOD_NOTCHES;
+
+    public static final NamespacedKey BEEF_CHUNKUS_RECIPE = new NamespacedKey("beef_chunkus", "beef_chunkus");
 
     @Override
     public void onEnable() {

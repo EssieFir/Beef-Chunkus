@@ -1,0 +1,18 @@
+{
+    "beef_chunkus_craft": {
+         "sounds":[
+             {
+                 "name": "beef_chunkus:beef_chunkus_craft",
+                 "weight": 1
+             } 
+         ]
+    },
+    "beef_chunkus_finish": {
+        "sounds":[
+            {
+                "name": "beef_chunkus:beef_chunkus_finish",
+                "weight": 1
+            } 
+        ]
+   }
+}
