@@ -27,8 +27,8 @@ public class BeefChunkusEvent implements Listener {
             NBTItem nbtItem = new NBTItem(item, true);
 
             //Check if the item has the custom nbt data, if not, add it.
-            if (nbtItem.getInteger(FOOD_NOTCHES_KEY) == null) { nbtItem.setInteger(FOOD_NOTCHES_KEY, BEEF_CHUNKUS_DEFAULT_FOOD_NOTCHES); }
-            if (nbtItem.getInteger(FOOD_NOTCHES_KEY) == null) { nbtItem.setInteger(MAX_FOOD_NOTCHES_KEY, BEEF_CHUNKUS_DEFAULT_MAX_FOOD_NOTCHES); }
+            if (nbtItem.getInteger(FOOD_NOTCHES_KEY) == null) { nbtItem.setInteger(FOOD_NOTCHES_KEY, beef_chunkus_default_food_notches); }
+            if (nbtItem.getInteger(FOOD_NOTCHES_KEY) == null) { nbtItem.setInteger(MAX_FOOD_NOTCHES_KEY, beef_chunkus_default_max_food_notches); }
 
             int remainingFoodNotches = nbtItem.getInteger(FOOD_NOTCHES_KEY);
             int maxFoodNotches = nbtItem.getInteger(MAX_FOOD_NOTCHES_KEY);
@@ -47,7 +47,7 @@ public class BeefChunkusEvent implements Listener {
                     player.setFoodLevel(playerFoodLevel + remainingFoodNotches);
                     if (player.getFoodLevel()>= 20) { player.setFoodLevel(20); }
 
-                    amountToSaturate = (float) (remainingFoodNotches * BEEF_CHUNKUS_SATURATION_MULTIPLIER);
+                    amountToSaturate = (float) (remainingFoodNotches * beef_chunkus_saturation_multiplier);
                     if (amountToSaturate > playerFoodLevel+remainingFoodNotches) { amountToSaturate = playerFoodLevel+remainingFoodNotches; }
                     player.setSaturation(playerSaturationLevel + amountToSaturate);
 
@@ -55,7 +55,7 @@ public class BeefChunkusEvent implements Listener {
 
                 } else {
                     player.setFoodLevel(20);
-                    amountToSaturate = (float) (amountToFeed * BEEF_CHUNKUS_SATURATION_MULTIPLIER);
+                    amountToSaturate = (float) (amountToFeed * beef_chunkus_saturation_multiplier);
                     if (amountToSaturate > playerFoodLevel+amountToFeed) { amountToSaturate = playerFoodLevel+amountToFeed; }
                     player.setSaturation(playerSaturationLevel + amountToSaturate);
                     remainingFoodNotches -= amountToFeed;
@@ -88,7 +88,9 @@ public class BeefChunkusEvent implements Listener {
             //"Break" the item if it has no more food notches
             if (remainingFoodNotches <= 0) {
                 item.setType(Material.AIR);
-                player.playSound(player.getLocation(), "beef_chunkus:beef_chunkus_finish", 100f, 1f);
+                if (beef_chunkus_allow_play_finish_sound) {
+                    player.playSound(player.getLocation(), "beef_chunkus:beef_chunkus_finish", 100f, 1f);
+                }
             }
 
             //Spawn particles and sounds
@@ -129,7 +131,7 @@ public class BeefChunkusEvent implements Listener {
 
     @EventHandler
     public static void onCraft(CraftItemEvent event) {
-        if (isItemBeefChunkus(event.getCurrentItem())) {
+        if (beef_chunkus_allow_play_craft_sound && isItemBeefChunkus(event.getCurrentItem())) {
             Player player = (Player) event.getWhoClicked();
             player.playSound(player.getLocation(), "beef_chunkus:beef_chunkus_craft", 100f, 1f);
             event.getWhoClicked().discoverRecipe(BEEF_CHUNKUS_RECIPE);
@@ -143,9 +145,9 @@ public class BeefChunkusEvent implements Listener {
     }
 
     private static void correctBeefChunkusModelData(ItemStack item) {
-        if (!item.getItemMeta().hasCustomModelData() || item.getItemMeta().getCustomModelData() != BEEF_CHUNKUS_CUSTOM_MODEL_DATA) {
+        if (!item.getItemMeta().hasCustomModelData() || item.getItemMeta().getCustomModelData() != beef_chunkus_custom_model_data) {
             ItemMeta meta = item.getItemMeta();
-            meta.setCustomModelData(BEEF_CHUNKUS_CUSTOM_MODEL_DATA);
+            meta.setCustomModelData(beef_chunkus_custom_model_data);
             item.setItemMeta(meta);
         }
     }

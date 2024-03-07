@@ -2,3 +2,5 @@ beef_chunkus_custom_model_data: 1
 beef_chunkus_saturation_multiplier: 1.4
 beef_chunkus_default_food_notches: 70
 beef_chunkus_default_max_food_notches: 70
+beef_chunkus_allow_play_craft_sound: true
+beef_chunkus_allow_play_finish_sound: true

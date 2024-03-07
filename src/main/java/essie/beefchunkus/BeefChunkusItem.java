@@ -3,7 +3,6 @@ package essie.beefchunkus;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -28,13 +27,13 @@ public class BeefChunkusItem {
         ItemMeta meta = item.getItemMeta();
 
         meta.setDisplayName("§rBeef Chunkus");
-        meta.setCustomModelData(BEEF_CHUNKUS_CUSTOM_MODEL_DATA);
-        meta.setLore(BeefChunkusEvent.createFoodTooltip(BEEF_CHUNKUS_DEFAULT_FOOD_NOTCHES, BEEF_CHUNKUS_DEFAULT_MAX_FOOD_NOTCHES));
+        meta.setCustomModelData(beef_chunkus_custom_model_data);
+        meta.setLore(BeefChunkusEvent.createFoodTooltip(beef_chunkus_default_food_notches, beef_chunkus_default_max_food_notches));
         item.setItemMeta(meta);
 
         NBTItem nbtItem = new NBTItem(item, true);
-        nbtItem.setInteger(FOOD_NOTCHES_KEY, BEEF_CHUNKUS_DEFAULT_FOOD_NOTCHES);
-        nbtItem.setInteger(MAX_FOOD_NOTCHES_KEY, BEEF_CHUNKUS_DEFAULT_MAX_FOOD_NOTCHES);
+        nbtItem.setInteger(FOOD_NOTCHES_KEY, beef_chunkus_default_food_notches);
+        nbtItem.setInteger(MAX_FOOD_NOTCHES_KEY, beef_chunkus_default_max_food_notches);
         //I'm not sure how to prevent mending from being applied, so here's a fix I guess.
         nbtItem.setInteger("RepairCost", 2560);
         nbtItem.setBoolean(VALID_BEEF_CHUNKUS_KEY, true);

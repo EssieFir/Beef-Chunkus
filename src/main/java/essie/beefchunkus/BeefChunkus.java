@@ -1,15 +1,16 @@
 package essie.beefchunkus;
 
-import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class BeefChunkus extends JavaPlugin {
 
-    public static int BEEF_CHUNKUS_CUSTOM_MODEL_DATA;
-    public static double BEEF_CHUNKUS_SATURATION_MULTIPLIER;
-    public static int BEEF_CHUNKUS_DEFAULT_FOOD_NOTCHES;
-    public static int BEEF_CHUNKUS_DEFAULT_MAX_FOOD_NOTCHES;
+    public static int beef_chunkus_custom_model_data;
+    public static double beef_chunkus_saturation_multiplier;
+    public static int beef_chunkus_default_food_notches;
+    public static int beef_chunkus_default_max_food_notches;
+    public static boolean beef_chunkus_allow_play_craft_sound;
+    public static boolean beef_chunkus_allow_play_finish_sound;
 
     public static final NamespacedKey BEEF_CHUNKUS_RECIPE = new NamespacedKey("beef_chunkus", "beef_chunkus");
 
@@ -17,10 +18,12 @@ public final class BeefChunkus extends JavaPlugin {
     public void onEnable() {
         // Plugin startup logic
         saveDefaultConfig();
-        BEEF_CHUNKUS_CUSTOM_MODEL_DATA = getConfig().getInt("beef_chunkus_custom_model_data");
-        BEEF_CHUNKUS_SATURATION_MULTIPLIER = getConfig().getInt("beef_chunkus_saturation_multiplier");
-        BEEF_CHUNKUS_DEFAULT_FOOD_NOTCHES = getConfig().getInt("beef_chunkus_default_food_notches");
-        BEEF_CHUNKUS_DEFAULT_MAX_FOOD_NOTCHES = getConfig().getInt("beef_chunkus_default_max_food_notches");
+        beef_chunkus_custom_model_data = getConfig().getInt("beef_chunkus_custom_model_data");
+        beef_chunkus_saturation_multiplier = getConfig().getInt("beef_chunkus_saturation_multiplier");
+        beef_chunkus_default_food_notches = getConfig().getInt("beef_chunkus_default_food_notches");
+        beef_chunkus_default_max_food_notches = getConfig().getInt("beef_chunkus_default_max_food_notches");
+        beef_chunkus_allow_play_craft_sound = getConfig().getBoolean("beef_chunkus_allow_play_craft_sound", true);
+        beef_chunkus_allow_play_finish_sound = getConfig().getBoolean("beef_chunkus_allow_play_finish_sound", true);
 
         BeefChunkusItem.init();
         getServer().getPluginManager().registerEvents(new BeefChunkusEvent(), this);
