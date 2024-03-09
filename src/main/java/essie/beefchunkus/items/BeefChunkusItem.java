@@ -1,8 +1,10 @@
-package essie.beefchunkus;
+package essie.beefchunkus.items;
 
 import de.tr7zw.changeme.nbtapi.NBTItem;
+import essie.beefchunkus.BeefChunkusEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -14,7 +16,7 @@ public class BeefChunkusItem {
     public static final String FOOD_NOTCHES_KEY = "beef_chunkus:food_notches";
     public static final String MAX_FOOD_NOTCHES_KEY = "beef_chunkus:max_food_notches";
     public static final String VALID_BEEF_CHUNKUS_KEY = "beef_chunkus:valid_beef_chunkus";
-
+    public static final NamespacedKey BEEF_CHUNKUS_RECIPE = new NamespacedKey("beef_chunkus", "beef_chunkus");
     public static ItemStack beefChunkus;
 
     public static void init() {

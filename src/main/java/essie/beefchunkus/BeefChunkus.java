@@ -1,5 +1,7 @@
 package essie.beefchunkus;
 
+import essie.beefchunkus.items.BeefChunkusItem;
+import essie.beefchunkus.items.MendingAppleItem;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -11,8 +13,6 @@ public final class BeefChunkus extends JavaPlugin {
     public static int beef_chunkus_default_max_food_notches;
     public static boolean beef_chunkus_allow_play_craft_sound;
     public static boolean beef_chunkus_allow_play_finish_sound;
-
-    public static final NamespacedKey BEEF_CHUNKUS_RECIPE = new NamespacedKey("beef_chunkus", "beef_chunkus");
 
     @Override
     public void onEnable() {
@@ -26,7 +26,9 @@ public final class BeefChunkus extends JavaPlugin {
         beef_chunkus_allow_play_finish_sound = getConfig().getBoolean("beef_chunkus_allow_play_finish_sound", true);
 
         BeefChunkusItem.init();
+        MendingAppleItem.init();
         getServer().getPluginManager().registerEvents(new BeefChunkusEvent(), this);
+        getServer().getPluginManager().registerEvents(new MendingAppleEvent(), this);
         this.getCommand("beefchunkus").setExecutor(new BeefChunkusCommand());
     }
 

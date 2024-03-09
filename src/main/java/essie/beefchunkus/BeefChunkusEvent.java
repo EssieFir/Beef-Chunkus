@@ -1,6 +1,7 @@
 package essie.beefchunkus;
 
 import de.tr7zw.changeme.nbtapi.NBTItem;
+import essie.beefchunkus.items.BeefChunkusItem;
 import org.bukkit.*;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -17,7 +18,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.List;
 
 import static essie.beefchunkus.BeefChunkus.*;
-import static essie.beefchunkus.BeefChunkusItem.*;
+import static essie.beefchunkus.items.BeefChunkusItem.*;
 
 public class BeefChunkusEvent implements Listener {
 
